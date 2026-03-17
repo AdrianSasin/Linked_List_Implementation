@@ -65,7 +65,85 @@ class Program
         }
         return prev;
     }
+    static void MoveLastNodeToFront<T>(ref Node<T> head)
+    {
+        if (head == null || head.Next == null)
+        {
+            return;
+        }
+        var secondLast = head;
+        while (secondLast.Next.Next != null)
+        {
+            secondLast = secondLast.Next;
+        }
+        var lastNode = secondLast.Next;
+        secondLast.Next = null;
+        lastNode.Next = head;
+        head = lastNode;
+    }
 
+    static void RemoveNodeAt<T>(int position, ref Node<T> head)
+    {
+        if (position < 0 || head == null)
+        {
+            return;
+        }
+        if (position == 0)
+        {
+            head = head.Next;
+            return;
+        }
+        var current = head;
+        for (int i = 0; current != null && i < position - 1; i++)
+        {
+            current = current.Next;
+        }
+        if (current == null || current.Next == null)
+        {
+            return;
+        }
+        current.Next = current.Next.Next;
+    }
+
+    static void RemoveAllDuplicatesFromSortedLinkedList<T>(ref Node<T> head)
+    where T : IEquatable<T>, IComparable<T>
+    {
+        Node<T> dummy = new Node<T>(default(T), head), prev = dummy, curr = head;
+        while (curr != null)
+        {
+            bool dup = false;
+            while (curr.Next != null && curr.Data.Equals(curr.Next.Data))
+            {
+                dup = true;
+                curr = curr.Next;
+            }
+            if (dup) prev.Next = curr.Next;
+            else prev = curr;
+            curr = curr.Next;
+        }
+        head = dummy.Next;
+    }
+    static void DistinctElementsInLinkedList<T>(ref Node<T> head)
+    where T : IEquatable<T>, IComparable<T>
+    {
+        for (Node<T> current = head; current != null; current = current.Next)
+        {
+            Node<T> prev = current;
+            for (Node<T> runner = current.Next; runner != null;)
+            {
+                if (current.Data.Equals(runner.Data))
+                {
+                    prev.Next = runner.Next;
+                    runner = runner.Next;
+                }
+                else
+                {
+                    prev = runner;
+                    runner = runner.Next;
+                }
+            }
+        }
+    }
 
 }
 
